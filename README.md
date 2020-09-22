@@ -33,11 +33,13 @@ After loading dataset to dataframe, we started examining dataset to confirm some
 
 The dataset has 4 instances that did not have values on our target variable "Clicked on Ad". Those instances will be removed. Besides, there are 7 duplicated records. They will also be removed as they might cause bias when building predictive model.
 
-### 2.2 Describing Features
+### 2.2 Data Cleaning
 
 #### Is our dataset balanced on 'Clicked on Ad'?
 
 After clearing out the missing values and duplicated records, we see that our dataset is the quite balanced one on the number of potential customers who clicked and did not click on the ad. There are 50.2% of audiences clicking on our ad and 49.8% of audience who did not click on ours.\
 We will review this question again before training and building model.
 
-#### Descriptive Statistics on each numerical variable
+#### Does data has any outliers?
+
+We find that our numerical variables do not seem to be skewed as the mean and the median are roughly similar.
