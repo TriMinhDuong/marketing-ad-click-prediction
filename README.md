@@ -55,6 +55,8 @@ The feature 'Daily Time Spent on Site' should be equal or less than 'Daily Inter
 ### 2.2 Exploratory Data Analysis
 
 #### Descriptive Statistics for Numerical Features
+Let's take a look at the distribution of our numerical features and the correlations between them.\
+
 ![distplot numerical variables](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/distplot-numerical_variables.png)\
 The distribution plots for 'Daily Time Spent on Site' and 'Daily Internet Usage' seem to be a bimodal distributions. It means that there could be more than 1 group which is classified by these 2 features. The distribution plots for 'Age' and 'Area Income' are little skewed which could bias our predictive model later. We will use log transformation on these variables to help normalizing the data.\
 
@@ -62,4 +64,7 @@ The distribution plots for 'Daily Time Spent on Site' and 'Daily Internet Usage'
 The boxplots on 'Daily Tim Spent on Site' and 'Daily Internet Usage' show a significant difference between 2 groups, people who clicked on the Ad and people who did not. Furthermore, we will observe a potential trend between these 2 groups with 'Age' and 'Area Income' respectively.\
 
 ![correlation numerical variables](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/correlation-numerical_variables.png)\
-The cross-correlation above revealed potential relationship between our target feature 'Clicked on Ad' with other features except gender. Now we would need to keep these relationship in mind since there could be some collinearity between the explanatory features.
+The cross-correlation above revealed potential relationship between our target feature 'Clicked on Ad' with other features except gender. Besides, there is no significant relationship between our independent numerical features. Therefore, there could not be collinearity happening between these features.
+
+#### Distribution Plots with Respect to Our Target Feature
+[distplot numerical variables with target feature](
