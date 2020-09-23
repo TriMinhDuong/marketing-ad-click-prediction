@@ -96,4 +96,4 @@ Before performing machine learning, we will transform some features having skewe
 
 As mentioned in section 2, we will not consider the feature 'Ad Topic Line' and 'Timestamp' at this moment. We will not be considering the feature 'City' because it does not have predictive power. Hence, those 3 features will be removed from our train and test sets.
 
-
+The numerical features we have in our dataset have different ranges. Therefore, the next step 
