@@ -72,6 +72,7 @@ The cross-correlation above revealed potential relationship between our target f
 
 #### Distribution Plots with Respect to Our Target Feature
 ![distplot numerical variables with target feature](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/distplot-numerical_variables-target.png)
+![pairplot numerical variables with target feature](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/pairplot-numerical_variables-target.png)
 
 We observe the significant differences on 'Daily Time Spent on Site' and 'Daily Internet Usage' between the people who clicked the ad and who did not. The people who clicked ad tended to have less time spent on site and less daily internet usage. In term of Age, the distribution of people who clicked on ad spreaded out from around 20 to 60 years old, while the distribution of people who did not clicked on ad are in the range between 20 and less than 50 years old.
 
