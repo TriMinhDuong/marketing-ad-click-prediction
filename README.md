@@ -23,7 +23,7 @@ Country | Which country were they living? | Text
 Timestamp | What time did they see the ad? | DateTime
 Clicked on Ad | Did they click the ad? | Binary (1 - Clicked, 0 - Not Clicked)
 
-## 2. Data Exploratory Analysis
+## 2. Discover Data
 
 ### 2.1 Exploring Dataset
 
