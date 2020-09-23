@@ -33,15 +33,11 @@ After loading dataset to dataframe, we started examining dataset to confirm some
 
 The dataset has 4 instances that did not have values on our target variable "Clicked on Ad". Those instances will be removed. Besides, there are 7 duplicated records. They will also be removed as they might cause bias when building predictive model.
 
-### 2.2 Data Cleaning
-
 #### Is our dataset balanced on 'Clicked on Ad'?
-
 After clearing out the missing values and duplicated records, we see that our dataset is the quite balanced one on the number of potential customers who clicked and did not click on the ad. There are 50.2% of audiences clicking on our ad and 49.8% of audience who did not click on ours.\
 We will review this question again before training and building model.
 
 #### Does data has any outliers?
-
 We find that our numerical variables do not seem to be skewed as the mean and the median are roughly similar. With this, it is not neccessary to transform our data.
 
 ![Descriptive Statistics](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/numerical_variables-descriptive_statistics.png)
@@ -50,3 +46,10 @@ We can see that the range of values on Area Income is quite broad. Additionally,
 
 ![Range of Age Feature](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/age_range.png)\
 We set our normal range is from 0 years old to 100 years old. We can see that there are 3 values that are out of the normal range of age and 1 negative value which is unreasonable for the Age feature. They are the outliers which should be removed from the dataset.
+
+#### Review the features 'Daily Time Spent on Site' and 'Daily Internet Usage'
+The feature 'Daily Time Spent on Site' should be equal or less than 'Daily Internet Usage'. There are 3 instances in the dataset which have 'Daily Internet Usage' less than 'Daily Time Spent on Site'. They will be removed from the dataset.
+
+![Daily Internet Usage less than Daily Time Spent on Site](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/delta_less_than_zero.png)
+
+### 2.2 Exploratory Data Analysis
