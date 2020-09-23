@@ -47,7 +47,5 @@ We find that our numerical variables do not seem to be skewed as the mean and th
 ![Descriptive Statistics](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/numerical_variables-descriptive_statistics.png)
 
 We can see that the range of values on Area Income is quite broad. Additionally, the range of **Age** feature is quite fishy. The minimum and maximum values are not reasonable. We can take a clearer look with the chart below which is showing all current possible values of this feature
-
 ![Range of Age Feature](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/age_range.png)
-
 We set our normal range is from 0 years old to 100 years old. We can see that there are 3 values that are out of the normal range of age and 1 negative value which is unreasonable for the Age feature. They are the outliers which should be removed from the dataset.
