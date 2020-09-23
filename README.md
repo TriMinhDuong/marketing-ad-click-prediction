@@ -78,3 +78,22 @@ We observe the significant differences on 'Daily Time Spent on Site' and 'Daily 
 
 #### Distribution of Categorical Features
 
+There are 4 features in the dataset that are in text format. Due to the time being, the feature 'Ad Topic Line' and 'Timestamp' will be skipped at this moment. The feature 'Ad Topic Line' need to analyzed using Natural Language Processing and the feature 'Timestamp' need to view as the time series data.
+
+Looking at the feature 'City', there are 969 different cities in the dataset out of 1000 instances. It means that there are almost no chance to have many instances from the same city. Therefore, we can confirm that this feature has no predictive power. However, we will have less diversity when it comes down to different countries, so we will take a look at the distribution of our dataset with regard to the feature 'Country'.
+
+![Distribution of Countries](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/distribution_countries.png)
+
+The statistical results show us that there are 237 unique countries in the dataset. On average, each country should have about 4 users and the maximum number of users which were from the same country is 9. This made the feature have very little power to predict whether a user would click on the ad.
+
+## 3. Develop Predictive Model
+
+### 3.1 Prepare Data and Features Engineering
+
+Since we currently do not have data with unknown results for target feature to test our model, we will split this dataset into training and testing sets to train and evaluate model performance. 80% of the dataset will be selected randomly for train set but the rest is for test set.
+
+Before performing machine learning, we will transform some features having skewed distribution to avoid some bias. Those features can make our models underperformed. We will apply logarithmic transformation to reduce the effect of outliers and reduce the distribution's range. From the section 2, we observed that'Age' was right skewed and 'Area Income' was left skewed, so the transformation will be applied to these feature.
+
+As mentioned in section 2, we will not consider the feature 'Ad Topic Line' and 'Timestamp' at this moment. We will not be considering the feature 'City' because it does not have predictive power. Hence, those 3 features will be removed from our train and test sets.
+
+
