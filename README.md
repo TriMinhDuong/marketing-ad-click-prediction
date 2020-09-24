@@ -96,4 +96,131 @@ Before performing machine learning, we will transform some features having skewe
 
 As mentioned in section 2, we will not consider the feature 'Ad Topic Line' and 'Timestamp' at this moment. We will not be considering the feature 'City' because it does not have predictive power. Hence, those 3 features will be removed from our train and test sets.
 
-The numerical features we have in our dataset have different ranges. Therefore, the next step 
+The numerical features we have in our dataset have different ranges. The range of the 'Age' feature is from 0 to 100 while the range of 'Area Income' is from 0 to around 80000. When building the model, the feature 'Area Income' will essentially influence the result more. To avoid this situation, we will normalize our numerical data using min-max scaling approach.
+
+In our model training, we will include the feature 'Country' which is a categorical variable. Hence, we need to transform the data to numerics using LabelEncoder. Since we will only fit the train data to the algorithm, we might experience the situation that some country names in test data did not exist in train data. To avoid our model scrashed when running in production, we will create a value called 'Others' with which those country names will be replaced.
+
+Our train dataset will be looked like below after completing feature engineering process.
+
+![final train set](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/train_set.png)
+
+### 3.2 Model Selection
+
+At this moment, we will only develop the predictive model using either **Logistic Regression** or **Random Forest Classifier**. There are 4 possible outcomes on the evaluation results for each prediction:
+- True Positive
+- False Positive
+- False Negative
+- True Negative
+
+As mentioned at the beginning, for each customer that we target for our ad campaign and that clicks on the ad, we will gain profit of 100CAD. If we target a customer that do not click on the ad, there will be a lost of 1050CAD. For each customer that we don't target for our campaign but end up clicking on the ad, the company will gain a profit of 1100CAD. 
+
+Therefore, we will need to lower the number of customers who we target but do not click on the ad. With that, we will need to lower the false positive. Hence, we will use precision score as our evaluation score for model selection. The higher precision score the model has, the better the model is. We will use GridSearchCV to look for the best estimator for each algorithm. Then we will compare the precision scores from 2 models built from Logistic Regression and Random Forest Classifier to decide the model which will be used to predict our test data.
+
+#### Logistic Regression
+
+With logistic regression, we are looking into optimize the value for parameters 'C' with l2 regularization.
+
+The first time, we tried C with value of 0.001, 0.01, 0.1, 1, 10, 100, and 1000. The search algorithm highlighted a value of 1 for C parameter used in the L2-Regularization with the precision score of 98.7066%
+
+![Logistic Regression first try](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/logistic_regression1.png)
+
+We tried the second time to search the values around 1 including 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, and 1.5. The searching gave us a value of 1.2 for C parameter with the precision score of 98.7122%.
+
+![Logistic Regression second try](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/logistic_regression2.png)
+
+New we will look into what the best model that Random Forest Classifier can give us.
+
+#### Random Forest Classifier
+
+We will tune each paramter, including max_depth, n_estimators, max_features, and min_samples_leaf, manually to review the changes of out-of-bag score and precision score. Besides, this will give us some estimations of what range of values we can use for each parameter when start search all toegther.
+
+After reviewing the movements of out-of-bag score and precision score with respect to the changes on each parameter, we look into to find the best combination of the values for the parameters.
+
+The ranges of searching are outlined below
+- "n_estimators": [20, 40, 60, 80, 100]
+- "max_depth": [7, 8, 9, 10, 11, 12, 13, 14]
+- "min_samples_leaf": [2, 3, 4, 5, 6, 7, 8, 9, 10, 15]
+- "max_features": ["auto", None, "log2"]
+
+The GridSearchCV gave us the optimized model as below:
+
+![Random Forest Classifier](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/rfc.png)
+
+The best estimators we got from Random Forest Classifier are:
+- n_estimators = 20
+- max_depth = 8
+- min_sample_leaf = 3
+- max_features = "auto" (which is the squared root of number of features in train dataset)
+
+This gave us the evaluation score as 96.453%.
+
+#### Best Model
+
+The highest precision score from Logistic Regression was 98.7122% while the highest precision score from Random Forest Classifier was 96.453%. Therefore, the best model which will be used for prediction is generated from Logistic Regression.
+
+![Best Model](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/best_model.png)
+
+After fitting this model to our train dataset, we got a list of coefficent values for all of our independent variables which were used in building model.
+- Daily Internet Usage: -5.511
+- Daily Time Spent on Site: -4.791
+- Age: 3.794
+- Area Income: -2.918
+- Male: -0.261
+- Country: 0.003
+
+We can see that 'Daily Internet Usage', 'Daily Time Spent on Site', 'Age' and 'Area Income' have more impacts to the predictions comparing with the other 2 features.
+
+#### Confusion Matrix
+
+Let's look deeper each possible cases outlined at the beginning and see how we can optimize the model.
+
+![Confusion Matrix - Train 1](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/confusion_matrix-train1.png)
+
+According to the matrix, there are 373 instances which were predicted as '1' (click on the ad) and they actually clicked on the ad. However, there are 5 instances which were predicted as '1' (click on the ad) but these potential customers did not click on the ad in realistic. This incorrect predictions could cause the company in lossing 5,250CAD according to our estimation of costs and profits on running marketing ad campaign.
+
+Let's look at the probability distribution of our model to see if increasing the threshold could be beneficial to reduce the number of false positive, consequently reducing our loss.
+
+![Histogram of Predicted probabilities](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/histogram-train1.png)
+
+Based on the chart, it seems that our model does not carry a lot of ambiguity when it was predicting if someone would click on the ad. We could still increase our threshold to 0.65 to decrease the number of false positive cases, even though our current model seems quite categorical.
+
+Let's apply this new threshold to see how our profits are optimized.
+
+![Confusion Matrix - Train 2](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/confusion_matrix-train2.png)
+
+By increasing our threshold, we are able to decrease the lost for the company by sending the ad to the wrong audience. The revised profits are now 80,850CAD comparing with the previous one as 60,650CAD.
+
+Let's predict the test data with the best model we have selected with default and new threshold.
+
+The summary for the predictions with default threshold as 0.5 is below.
+
+![Confusion Matrix - Test 1](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/confusion_matrix-test1.png)
+
+And then below is the summary for the predictions with threshold as 0.65.
+
+![Confusion Matrix - Test 2](https://github.com/TriMinhDuong/marketing-ad-click-prediction/blob/master/images/confusion_matrix-test2.png)
+
+Our test set has a sample size of 200 customers. **With the new threshold, our predicted overall profit would be 17,100CAD**. This includes:
+- Profit of 9,400CAD from true positives
+- Profit of 7,700CAD from false negatives
+- Loss of 0CAD from false positives
+
+Indeed, the false negatives are extremely rewarding considering this particular problem. There could be a lost from the false positives but the count would be less than or equal to 2 which is 2 out of 200 (1%). We can state that the results are excellent considering the margin of error and the predicted profit.
+
+## 4. Actionable Recommendations
+
+According to our model and analysis, we can identify the potential customers by getting information of:
+
+- Daily Time Spent on Site
+- Daily Internet Usage
+- Area Income
+- Age
+By getting this information, we can target new customers with our ad campaign to maximize the chance of a return on investment.
+
+From our exploratory data analysis, our targeted population would be customers with:
+
+- Lower income
+- Less time spent on the internet
+- Less tiem spent on site
+- Older than our average sample (mean around 35 years old)
+Also by increasing our threshold from our model, we can minimize the number of wrong targets to minize loss which will optimize our business approach.
