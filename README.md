@@ -1,4 +1,4 @@
-# Who do you want to show your marketing ad to maximum your profits?
+# Who do you want to show your marketing ad to maximize your profits?
 
 ## 1. Define Problem
 
